@@ -1,8 +1,9 @@
 use std::str::Chars;
+use std::collections::HashMap;
+
 use super::value::Value;
 use super::value::Number;
 use super::value::Num;
-use std::collections::HashMap;
 
 pub struct De<'a> {
     program: Chars<'a>,
