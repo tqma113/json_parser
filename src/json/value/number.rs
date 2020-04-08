@@ -1,8 +1,8 @@
 pub struct Number {
-    num: Num
+    pub num: Num
 }
 
-enum Num {
+pub enum Num {
     PosInt(u64),
     NegInt(i64),
     Float(f64),
