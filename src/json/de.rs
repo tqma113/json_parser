@@ -58,9 +58,7 @@ impl De {
                 if c == 't' {} else if c == 'f' {} else if c == 'n' {} else {
                     match self.match_number() {
                         Ok(num) => {
-                            Ok(Value::Number(Number {
-                                num: Num::Float(num)
-                            }))
+                            Ok(Value::Number(num))
                         }
                         Err(message) => {
                             match self.match_string() {
@@ -265,7 +263,7 @@ impl De {
         }
     }
 
-    pub fn match_number(&mut self) -> Result<f64, String> {
+    pub fn match_number(&mut self) -> Result<Number, String> {
         match self.peek {
             Some(c) => {
                 loop {
@@ -277,7 +275,11 @@ impl De {
                                 Ok(_) => {
                                     match self.match_integer() {
                                         Ok(fraction) => {
-                                            break Ok(int + (fraction / (fraction.to_string().len() as u32)));
+                                            break Ok(
+                                                Number {
+                                                    num: Num::Float((int + (fraction / (fraction.to_string().len() as u32))) as f64)
+                                                }
+                                            );
                                         }
                                         Err(message) => {
                                             Err(String::from(message))
@@ -289,7 +291,11 @@ impl De {
                                         Ok(_) => {
                                             match self.match_integer() {
                                                 Ok(e) => {
-                                                    break Ok(int * 10 ^ e);
+                                                    break Ok(
+                                                        Number {
+                                                            num: Num::PosInt((int * 10 ^ e) as u64)
+                                                        }
+                                                    );
                                                 }
                                                 Err(message) => {
                                                     Err(String::from(message))
