@@ -17,8 +17,8 @@ pub enum Value {
 }
 
 impl Value {
-    pub fn get<I: Index>(&self, i: I) -> Option<&Value> {
-        i.get(self)
+    pub fn index_into<I: Index>(&self, i: I) -> Option<&Value> {
+        i.index_into(self)
     }
 
     pub fn is_null(&self) -> bool {
@@ -28,10 +28,10 @@ impl Value {
         }
     }
 
-    pub fn as_boolean(&self) -> Boolean {
+    pub fn as_boolean(&self) -> Option<bool> {
         match *self {
-            Value::Boolean(ref b) => Some(b),
-            _ => false
+            Value::Boolean(ref b) => Some(*b),
+            _ => None
         }
     }
 
@@ -42,31 +42,10 @@ impl Value {
         }
     }
 
-    pub fn as_number(&self) -> bool {
-        match *self {
-            Value::Number(_) => true,
-            _ => false
-        }
-    }
-
-    pub fn as_u64(&self) -> bool {
-        match *self {
-            Value::Number(&u64) => true,
-            _ => false
-        }
-    }
-
-    pub fn as_i64(&self) -> bool {
-        match *self {
-            Value::Number(&i64) => true,
-            _ => false
-        }
-    }
-
-    pub fn as_f64(&self) -> bool {
-        match *self {
-            Value::Number(&f64) => true,
-            _ => false
+    pub fn as_number(&self) -> Option<&Number> {
+        match self {
+            Value::Number(n) => Some(n),
+            _ => None
         }
     }
 
